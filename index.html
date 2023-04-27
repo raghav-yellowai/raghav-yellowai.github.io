@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capture Image</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script>
+        function openCamera(senderId) {
+            top.postMessage({ "event": "open-camera", "senderId": senderId }, '*');
+            console.log("Send open-camera event with senderId = " + senderId);
+        }
+
+        window.addEventListener("message", function(e) {
+            console.log("EVENT RECEIVED BY YELLOW");
+            console.log(e.data);
+
+            // Get the senderId parameter from the message data
+            var senderId = e.data.senderId;
+
+            // Use the senderId parameter as needed
+            console.log("senderId = " + senderId);
+        }, false);
+
+        $(document).ready(function() {
+            // Get the senderId parameter from the URL query string
+            var queryString = window.location.search;
+            var urlParams = new URLSearchParams(queryString);
+            var senderId = urlParams.get("senderId");
+
+            // Call the openCamera() function with the senderId parameter
+            if (senderId) {
+                openCamera(senderId);
+            } else {
+                openCamera();
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <button id="open-camera">Take selfie</button>
+</body>
+
+</html>
