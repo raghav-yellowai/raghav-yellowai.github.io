@@ -6,35 +6,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Capture Image</title>
     <script>
-    function openCamera(senderId) {
-        top.postMessage({ "event": "open-camera", "senderId": senderId }, '*');
-        console.log("Send open-camera event with senderId = " + senderId);
-    }
+        let buttonClicked = false; // Variable to keep track of whether the button has been clicked
 
-    window.addEventListener("message", function(e) {
-        console.log("EVENT RECEIVED BY YELLOW");
-        console.log(e.data);
-
-        // Get the senderId parameter from the message data
-        var senderId = e.data.senderId;
-
-        // Use the senderId parameter as needed
-        console.log("senderId = " + senderId);
-    }, false);
-
-    function handleButtonClick() {
-        // Get the senderId parameter from the URL query string
-        var queryString = window.location.search;
-        var urlParams = new URLSearchParams(queryString);
-        var senderId = urlParams.get("senderId");
-
-        // Call the openCamera() function with the senderId parameter
-        if (senderId) {
-            openCamera(senderId);
-        } else {
-            openCamera();
+        function openCamera(senderId) {
+            top.postMessage({ "event": "open-camera", "senderId": senderId }, '*');
+            console.log("Send open-camera event with senderId = " + senderId);
         }
-    }
+
+        window.addEventListener("message", function (e) {
+            console.log("EVENT RECEIVED BY YELLOW");
+            console.log(e.data);
+
+            // Get the senderId parameter from the message data
+            var senderId = e.data.senderId;
+
+            // Use the senderId parameter as needed
+            console.log("senderId = " + senderId);
+        }, false);
+
+        function handleButtonClick() {
+            if (!buttonClicked) { // Check if the button has not been clicked before
+                // Get the senderId parameter from the URL query string
+                var queryString = window.location.search;
+                var urlParams = new URLSearchParams(queryString);
+                var senderId = urlParams.get("senderId");
+
+                // Call the openCamera() function with the senderId parameter
+                if (senderId) {
+                    openCamera(senderId);
+                } else {
+                    openCamera();
+                }
+
+                buttonClicked = true; // Set the buttonClicked variable to true to prevent multiple clicks
+                document.getElementById("open-camera").disabled = true; // Disable the button after clicking
+            }
+        }
     </script>
 </head>
 
